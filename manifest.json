@@ -1,0 +1,22 @@
+{
+	"manifest_version": 2,
+	"name": "Comic Prerender",
+	"description": "Adds prerendering to webcomic sites if they don't have it.",
+	"version": "1.0",
+	"icons": {
+		"16": "icon16.png",
+		"48": "icon48.png",
+		"128": "icon128.png"
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"*://*/*"
+			],
+			"js": [
+				"zepto.js",
+				"inject_prerender.js"
+			]
+		}
+	]
+}
