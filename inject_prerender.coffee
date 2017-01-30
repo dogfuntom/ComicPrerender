@@ -4,11 +4,19 @@ contains = (str, sub) ->
   'use strict'
   str.toLowerCase().includes sub.toLowerCase()
 
+toArray = (zArr) ->
+  'use strict'
+  trueArr = new Array zArr.size()
+  zArr.each (index) ->
+    trueArr[index] = this
+  trueArr
+
 distinct = (zArr) ->
   'use strict'
-  zArr.filter (index) ->
+  arr = toArray zArr
+  $ arr.filter (item, index) ->
     'use strict'
-    zArr.indexOf(this) == index
+    arr.indexOf(item) == index
 
 isProbablyNext = (item) ->
   'use strict'
@@ -17,8 +25,10 @@ isProbablyNext = (item) ->
     return true
   if contains(item.rel, 'next')
     return true
+  if contains(item.text, 'next')
+    return true
 
-  imgs = $(item).find('img')
+  imgs = $(item).find 'img'
   hasNextImg = imgs.filter((index) ->
     if contains(@alt, 'next')
       return true

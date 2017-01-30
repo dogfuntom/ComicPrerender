@@ -1,22 +1,28 @@
-
-/*if !String::includes
-  String::includes = ->
-    'use strict'
-    String::indexOf.apply(this, arguments) != -1
- */
-var contains, distinct, head, isProbablyNext, links, nextHrefs, nextLinks, prerenders;
+var contains, distinct, isProbablyNext, nextHrefs, nextLinks, prerenders, toArray;
 
 contains = function(str, sub) {
   'use strict';
   return str.toLowerCase().includes(sub.toLowerCase());
 };
 
+toArray = function(zArr) {
+  'use strict';
+  var trueArr;
+  trueArr = new Array(zArr.size());
+  zArr.each(function(index) {
+    return trueArr[index] = this;
+  });
+  return trueArr;
+};
+
 distinct = function(zArr) {
   'use strict';
-  return zArr.filter(function(index) {
+  var arr;
+  arr = toArray(zArr);
+  return $(arr.filter(function(item, index) {
     'use strict';
-    return zArr.indexOf(this) === index;
-  });
+    return arr.indexOf(item) === index;
+  }));
 };
 
 isProbablyNext = function(item) {
@@ -26,6 +32,9 @@ isProbablyNext = function(item) {
     return true;
   }
   if (contains(item.rel, 'next')) {
+    return true;
+  }
+  if (contains(item.text, 'next')) {
     return true;
   }
   imgs = $(item).find('img');
@@ -41,21 +50,15 @@ isProbablyNext = function(item) {
   return hasNextImg;
 };
 
-links = $('a');
-
-head = $('head');
-
-nextLinks = links.filter(function(index) {
+nextLinks = $('a').filter(function(index) {
   'use strict';
   return isProbablyNext(this);
 });
 
-nextHrefs = nextLinks.map(function(index, item) {
+nextHrefs = distinct(nextLinks.map(function(index, item) {
   'use strict';
   return item.href;
-});
-
-nextHrefs = distinct(nextHrefs);
+}));
 
 prerenders = nextHrefs.map(function(index, addr) {
   'use strict';
@@ -66,4 +69,4 @@ prerenders = nextHrefs.map(function(index, addr) {
   return prerenderLink;
 });
 
-head.append(prerenders);
+$('head').append(prerenders);
